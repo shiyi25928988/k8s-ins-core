@@ -1,0 +1,13 @@
+{
+	"NODES":[
+		{
+			"HOST_IP":"192.168.3.11",
+			"HOST_NAME":"master02",
+			"JOIN_CMD":"kubeadm join 192.168.3.8:6443 --token q9s39v.ee2xk6v4l0ad0lr6 --discovery-token-ca-cert-hash sha256:4094ad431b521f07d842313a5a726bfbe7e8923f12f7b4d4ff552498490ab6ff --control-plane --certificate-key 1c6b0275521f4ff4de51b9fd3f24632ca7cca8b7e3bf77d92c4839c30d704f68",
+			"PASSWORD":"1234567890",
+			"PORT":"22",
+			"TYPE":"",
+			"USER":"root"
+		}
+	]
+}
