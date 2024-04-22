@@ -14,32 +14,14 @@ import yi.shi.ssh.shell.SshContext;
 
 public class KubernetesActionFactory {
 
-    public static AbstractAction getAction(boolean isJoin,String version, SshContext sshContext, String...cmds){
+    public static AbstractAction getAction(boolean isJoin, SshContext sshContext, String...cmds){
 
-        KubernetesActionType actionTypeEnum = KubernetesActionType.getActionTypeByVersion(version, isJoin);
+        KubernetesActionType actionTypeEnum = KubernetesActionType.getActionTypeByVersion(isJoin);
         if(actionTypeEnum == null){
             return new NullAction();
         }
         AbstractAction action = null;
         switch (actionTypeEnum){
-            case INSTALL_MASTER_NODE_1_21_1:
-                action =
-                        new ConfigHostNameAction(sshContext,
-                        new ResetYumRepoAction(sshContext,
-                        new ShutdownFirewallAction(sshContext,
-                        new ShutdownSelinuxAction(sshContext,
-                        new ShutdownSwapAction(sshContext,
-                        new InstallDockerAction(sshContext,
-                        new SetKernelConfigAction(sshContext,
-                        new InstallKube_1_21_1_Action(sshContext,
-                        new ConfigMasterNode_1_21_1_Action(sshContext,
-                        new InstallCalicoAction(sshContext,
-                        new InstallMetricsAction(sshContext,
-                        new InstallIngressAction(sshContext,
-                        new InstallDashboardAction(sshContext,
-                        new PrintMaterTokenAction(sshContext,
-                        new CompleteAction()))))))))))))));
-                break;
             case INSTALL_MASTER_NODE_1_28_2:
                 action =
                         new ConfigHostNameAction(sshContext,
@@ -58,19 +40,6 @@ public class KubernetesActionFactory {
                         new InstallDashboardAction(sshContext,
                         new PrintMaterTokenAction(sshContext,
                         new CompleteAction())))))))))))))));
-                break;
-            case JOIN_IN_1_21_1:
-                action =
-                        new ConfigHostNameAction(sshContext,
-                        new ResetYumRepoAction(sshContext,
-                        new ShutdownFirewallAction(sshContext,
-                        new ShutdownSelinuxAction(sshContext,
-                        new ShutdownSwapAction(sshContext,
-                        new InstallDockerAction(sshContext,
-                        new SetKernelConfigAction(sshContext,
-                        new InstallKube_1_21_1_Action(sshContext,
-                        new JoinAsNodeAction(sshContext,
-                        new CompleteAction()).addCmd(cmds)))))))));
                 break;
             case JOIN_IN_1_28_2:
                 action =

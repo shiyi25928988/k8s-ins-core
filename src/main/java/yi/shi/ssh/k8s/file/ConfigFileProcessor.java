@@ -32,7 +32,7 @@ public class ConfigFileProcessor {
         throw new RuntimeException("配置文件不存在");
     }
 
-    public static void processConfig(ConfigInfo configInfo, String version) {
+    public static void processConfig(ConfigInfo configInfo) {
         configInfo.getList().forEach(nodeInfo -> {
             SshAuth sshAuth = new SshAuth();
             sshAuth.setIp(nodeInfo.getHostIp());
@@ -45,12 +45,12 @@ public class ConfigFileProcessor {
             try {
                 SshContext sshContext = new SshContext(sshAuth);
                 if(Strings.isNullOrEmpty(nodeInfo.getJoinCmd())){
-                    action = KubernetesActionFactory.getAction(false, version, sshContext);
+                    action = KubernetesActionFactory.getAction(false, sshContext);
                     SshProgressOutput.asyncOutput(CommandLineNumCount.getCmdLineNum(sshContext), sshContext);
                     Timer.start();
                     ActionExecutors.execute(action);
                 }else if(!Strings.isNullOrEmpty(nodeInfo.getJoinCmd()) && nodeInfo.getJoinCmd().startsWith("kubeadm join")){
-                    action = KubernetesActionFactory.getAction(false, version, sshContext, nodeInfo.getJoinCmd());
+                    action = KubernetesActionFactory.getAction(true, sshContext, nodeInfo.getJoinCmd());
                     SshProgressOutput.asyncOutput(CommandLineNumCount.getCmdLineNum(sshContext), sshContext);
                     Timer.start();
                     ActionExecutors.execute(action);

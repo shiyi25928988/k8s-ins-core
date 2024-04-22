@@ -27,13 +27,7 @@ public class Main {
                 String configFile = cmd.getOptionValue("install");
                 File file  = new File(configFile);
                 ConfigInfo configInfo = ConfigFileProcessor.loadConfigFile(file);
-                if(cmd.hasOption("v")){
-                    String version = cmd.getOptionValue("version");
-                    ConfigFileProcessor.processConfig(configInfo, version);
-                }
-                if(!cmd.hasOption("v")){
-                    ConfigFileProcessor.processConfig(configInfo, "1.28.2");
-                }
+                ConfigFileProcessor.processConfig(configInfo);
             }
             if(cmd.hasOption("t")){
                 ExportConfigFile.exportTemplateFile();
