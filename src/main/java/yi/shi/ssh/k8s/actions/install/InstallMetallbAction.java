@@ -1,5 +1,6 @@
 package yi.shi.ssh.k8s.actions.install;
 
+import com.google.common.io.CharStreams;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 import yi.shi.ssh.actions.AbstractAction;
@@ -9,8 +10,11 @@ import yi.shi.ssh.exception.SshCmdExecException;
 import yi.shi.ssh.shell.SshContext;
 import yi.shi.ssh.shell.SshUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 public class InstallMetallbAction extends AbstractAction {
@@ -44,6 +48,12 @@ public class InstallMetallbAction extends AbstractAction {
         InputStream inputStream = this.getClass().getResourceAsStream("/metallb/namespace.yaml");
         InputStream inputStream2 = this.getClass().getResourceAsStream("/metallb/metallb.yaml");
         InputStream inputStream3 = this.getClass().getResourceAsStream("/metallb/layer2-config.yaml");
+        try {
+            String str = CharStreams.toString(new InputStreamReader(inputStream3, StandardCharsets.UTF_8)).replace("- 0.0.0.0/0", "- " + this.getSshContext().getHostIp() + "/26");
+            inputStream3 = new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         try {
             SshUtil.upload(super.getSshContext().getSession(), inputStream, "/root/namespace.yaml");
             SshUtil.upload(super.getSshContext().getSession(), inputStream2, "/root/metallb.yaml");

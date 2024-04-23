@@ -18,7 +18,7 @@ public class Test {
         nodeInfo.setPort("22");
         nodeInfo.setHostName("worker01");
         nodeInfo.setPassword("1234567890");
-        nodeInfo.setJoinCmd("kubeadm join 192.168.3.137:6443 --token lyc67y.gglyzbb92rbnxixt --discovery-token-ca-cert-hash sha256:2099eee628fc959ba8003591ee81e6f16ce1b99acf7a9841615c0662c82785e6");
+        nodeInfo.setJoinCmd("kubeadm join 192.168.3.137:6443 --token tnx28f.ym9hjz4gba9736y8 --discovery-token-ca-cert-hash sha256:53e305e425c1157a202dfa3bcdf7897c8415cb1210eff81139b561296d1ed93e");
         list.add(nodeInfo);
         configInfo.setList(list);
         ConfigFileProcessor.processConfig(configInfo);
