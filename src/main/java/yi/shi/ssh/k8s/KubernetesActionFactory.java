@@ -39,7 +39,8 @@ public class KubernetesActionFactory {
                         new InstallIngressAction(sshContext,
                         new InstallDashboardAction(sshContext,
                         new PrintMaterTokenAction(sshContext,
-                        new CompleteAction())))))))))))))));
+                        new InstallMetallbAction(sshContext,
+                        new CompleteAction()))))))))))))))));
                 break;
             case JOIN_IN_1_28_2:
                 action =
