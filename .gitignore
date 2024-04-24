@@ -12,3 +12,4 @@ buildNumber.properties
 .idea/
 log/
 release/
+src/main/resources/helm/helm-v3.14.4-linux-amd64.tar.gz
