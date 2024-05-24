@@ -14,7 +14,6 @@ public class CommandLineOptions {
 		options.addOption("h", "help", notHasArgs, "Helper.");
 		options.addOption("i", "install", hasArg, "with the config json file.");
 		options.addOption("t", "template", notHasArgs, "generate k8s config template file.");
-		options.addOption("v", "version", hasArg, "currently support version:  1.21.1 ; 1.28.2 .");
 		//..... add options here
 	}
 	
