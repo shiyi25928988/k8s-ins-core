@@ -19,6 +19,7 @@ public class InstallHelmAction extends AbstractAction {
 
     static {
         cmds = new LinkedList<>();
+        cmds.add(Command.genCommand("cd /tmp"));
         cmds.add(Command.genCommand("tar -zxvf helm-v3.14.4-linux-amd64.tar.gz"));
         cmds.add(Command.genCommand("mv linux-amd64/helm /usr/local/bin/helm"));
         cmds.add(Command.genCommand("helm version"));
@@ -43,7 +44,7 @@ public class InstallHelmAction extends AbstractAction {
     public void execute() {
         InputStream inputStream = this.getClass().getResourceAsStream("/helm/helm-v3.14.4-linux-amd64.tar.gz");
         try {
-            SshUtil.upload(super.getSshContext().getSession(), inputStream, "/root/helm-v3.14.4-linux-amd64.tar.gz");
+            SshUtil.upload(super.getSshContext().getSession(), inputStream, "/tmp/helm-v3.14.4-linux-amd64.tar.gz");
         } catch (SftpException e) {
             throw new RuntimeException(e);
         } catch (JSchException e) {

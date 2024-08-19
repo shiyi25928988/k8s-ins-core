@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 
-public class InstallDashboardAction extends AbstractAction {
+public class UploadImagesAction extends AbstractAction {
 
     static LinkedList<Command> cmds;
 
@@ -21,49 +21,28 @@ public class InstallDashboardAction extends AbstractAction {
         cmds = new LinkedList<>();
         cmds.add(Command.genCommand("ctr -n k8s.io i import /tmp/dashboard_v2_7_0.tar.gz"));
         cmds.add(Command.genCommand("ctr -n k8s.io i import /tmp/metrics-scraper_v1_0_8.tar.gz"));
-        cmds.add(Command.genCommand("kubectl apply -f /tmp/recommended.yaml"));
-        cmds.add(Command.genCommand("kubectl apply -f /tmp/dashboard-user.yaml"));
-        cmds.add(Command.genCommand("kubectl -n kubernetes-dashboard create token admin-user"));
+        cmds.add(Command.genCommand("ctr -n k8s.io i import /tmp/controller_v0_12_1.tar.gz"));
+        cmds.add(Command.genCommand("ctr -n k8s.io i import /tmp/speaker_v0_12_1.tar.gz"));
+
     }
 
-    public InstallDashboardAction(SshContext sshContext, AbstractAction action) {
+    public UploadImagesAction(SshContext sshContext, AbstractAction action) {
         super(sshContext, action);
         CommandLineNumCount.updateCmdLineNum(cmds.size(), sshContext);
     }
 
-    public InstallDashboardAction(SshContext sshContext) {
+    public UploadImagesAction(SshContext sshContext) {
         super(sshContext);
-        CommandLineNumCount.updateCmdLineNum(cmds.size(), sshContext);
     }
-
-    public InstallDashboardAction() {
-        super();
-        CommandLineNumCount.updateCmdLineNum(cmds.size(), this.getSshContext());
-    }
-
 
 
     @Override
     public void execute() {
-
         try {
             uploadImage();
         } catch (JSchException e) {
             throw new RuntimeException(e);
         } catch (SftpException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        InputStream inputStream = this.getClass().getResourceAsStream("/dashboard/recommended.yaml");
-        InputStream inputStream2 = this.getClass().getResourceAsStream("/dashboard/dashboard-user.yaml");
-        try {
-            SshUtil.upload(super.getSshContext().getSession(), inputStream, "/tmp/recommended.yaml");
-            SshUtil.upload(super.getSshContext().getSession(), inputStream2, "/tmp/dashboard-user.yaml");
-        } catch (SftpException e) {
-            throw new RuntimeException(e);
-        } catch (JSchException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -87,5 +66,11 @@ public class InstallDashboardAction extends AbstractAction {
 
         SshUtil.upload(super.getSshContext().getSession(), inputStream1, "/tmp/dashboard_v2_7_0.tar.gz");
         SshUtil.upload(super.getSshContext().getSession(), inputStream2, "/tmp/metrics-scraper_v1_0_8.tar.gz");
+
+        InputStream inputStream3 = this.getClass().getResourceAsStream("/images/metallb/controller_v0_12_1.tar.gz");
+        InputStream inputStream4 = this.getClass().getResourceAsStream("/images/metallb/speaker_v0_12_1.tar.gz");
+
+        SshUtil.upload(super.getSshContext().getSession(), inputStream3, "/tmp/controller_v0_12_1.tar.gz");
+        SshUtil.upload(super.getSshContext().getSession(), inputStream4, "/tmp/speaker_v0_12_1.tar.gz");
     }
 }

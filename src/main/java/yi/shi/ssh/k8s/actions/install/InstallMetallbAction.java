@@ -23,9 +23,11 @@ public class InstallMetallbAction extends AbstractAction {
 
     static {
         cmds = new LinkedList<>();
-        cmds.add(Command.genCommand("kubectl apply -f /root/namespace.yaml"));
-        cmds.add(Command.genCommand("kubectl apply -f /root/metallb.yaml"));
-        cmds.add(Command.genCommand("kubectl apply -f /root/layer2-config.yaml"));
+        cmds.add(Command.genCommand("ctr -n k8s.io i import /tmp/controller_v0_12_1.tar.gz"));
+        cmds.add(Command.genCommand("ctr -n k8s.io i import /tmp/speaker_v0_12_1.tar.gz"));
+        cmds.add(Command.genCommand("kubectl apply -f /tmp/namespace.yaml"));
+        cmds.add(Command.genCommand("kubectl apply -f /tmp/metallb.yaml"));
+        cmds.add(Command.genCommand("kubectl apply -f /tmp/layer2-config.yaml"));
     }
 
     public InstallMetallbAction(SshContext sshContext, AbstractAction action) {
@@ -45,6 +47,17 @@ public class InstallMetallbAction extends AbstractAction {
 
     @Override
     public void execute() {
+
+        try {
+            uploadImage();
+        } catch (JSchException e) {
+            throw new RuntimeException(e);
+        } catch (SftpException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         InputStream inputStream = this.getClass().getResourceAsStream("/metallb/namespace.yaml");
         InputStream inputStream2 = this.getClass().getResourceAsStream("/metallb/metallb.yaml");
         InputStream inputStream3 = this.getClass().getResourceAsStream("/metallb/layer2-config.yaml");
@@ -55,9 +68,9 @@ public class InstallMetallbAction extends AbstractAction {
             throw new RuntimeException(e);
         }
         try {
-            SshUtil.upload(super.getSshContext().getSession(), inputStream, "/root/namespace.yaml");
-            SshUtil.upload(super.getSshContext().getSession(), inputStream2, "/root/metallb.yaml");
-            SshUtil.upload(super.getSshContext().getSession(), inputStream3, "/root/layer2-config.yaml");
+            SshUtil.upload(super.getSshContext().getSession(), inputStream, "/tmp/namespace.yaml");
+            SshUtil.upload(super.getSshContext().getSession(), inputStream2, "/tmp/metallb.yaml");
+            SshUtil.upload(super.getSshContext().getSession(), inputStream3, "/tmp/layer2-config.yaml");
         } catch (SftpException e) {
             throw new RuntimeException(e);
         } catch (JSchException e) {
@@ -76,5 +89,13 @@ public class InstallMetallbAction extends AbstractAction {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    private void uploadImage() throws JSchException, SftpException, IOException {
+        InputStream inputStream1 = this.getClass().getResourceAsStream("/images/metallb/controller_v0_12_1.tar.gz");
+        InputStream inputStream2 = this.getClass().getResourceAsStream("/images/metallb/speaker_v0_12_1.tar.gz");
+
+        SshUtil.upload(super.getSshContext().getSession(), inputStream1, "/tmp/controller_v0_12_1.tar.gz");
+        SshUtil.upload(super.getSshContext().getSession(), inputStream2, "/tmp/speaker_v0_12_1.tar.gz");
     }
 }

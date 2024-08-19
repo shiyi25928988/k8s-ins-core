@@ -14,11 +14,11 @@ public class Test {
         List<NodeInfo> list = new ArrayList<>();
         NodeInfo nodeInfo = new NodeInfo();
         nodeInfo.setUser("root");
-        nodeInfo.setHostIp("192.168.3.240");
+        nodeInfo.setHostIp("192.168.1.101");
         nodeInfo.setPort("22");
-        nodeInfo.setHostName("worker01");
+        nodeInfo.setHostName("worker");
         nodeInfo.setPassword("1234567890");
-        nodeInfo.setJoinCmd("kubeadm join 192.168.3.137:6443 --token tnx28f.ym9hjz4gba9736y8 --discovery-token-ca-cert-hash sha256:53e305e425c1157a202dfa3bcdf7897c8415cb1210eff81139b561296d1ed93e");
+        nodeInfo.setJoinCmd("kubeadm join 192.168.1.102:6443 --token f6m2b8.61jp2lme8n1kep9r --discovery-token-ca-cert-hash sha256:db54b36086081b30aebec28ce1a78afb605ae232d7e8bb09daa37a3ff7e35762");
         list.add(nodeInfo);
         configInfo.setList(list);
         ConfigFileProcessor.processConfig(configInfo);

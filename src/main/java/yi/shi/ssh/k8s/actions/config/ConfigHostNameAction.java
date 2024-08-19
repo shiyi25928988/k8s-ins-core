@@ -48,8 +48,4 @@ public class ConfigHostNameAction extends AbstractAction {
             }
         });
     }
-
-    public static void main(String...strings){
-        String.format("echo \" %s  %s \">> /etc/hosts", "2123", "123");
-    }
 }
