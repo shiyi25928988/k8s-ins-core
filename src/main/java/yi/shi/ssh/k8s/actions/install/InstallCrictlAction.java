@@ -50,7 +50,7 @@ public class InstallCrictlAction extends AbstractAction {
         }
         cmds.forEach(cmd ->{
             try {
-                System.out.println(cmd.getCmd());
+                //System.out.println(cmd.getCmd());
                 cmd.exec(this.getSshContext());
             } catch (JSchException e) {
                 throw new RuntimeException(e);

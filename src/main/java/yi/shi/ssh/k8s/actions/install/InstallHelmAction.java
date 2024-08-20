@@ -19,8 +19,8 @@ public class InstallHelmAction extends AbstractAction {
 
     static {
         cmds = new LinkedList<>();
-        cmds.add(Command.genCommand("cd /tmp"));
-        cmds.add(Command.genCommand("tar -zxvf helm-v3.14.4-linux-amd64.tar.gz"));
+        //cmds.add(Command.genCommand("cd /tmp"));
+        cmds.add(Command.genCommand("tar -zxvf /tmp/helm-v3.14.4-linux-amd64.tar.gz"));
         cmds.add(Command.genCommand("mv linux-amd64/helm /usr/local/bin/helm"));
         cmds.add(Command.genCommand("helm version"));
     }
